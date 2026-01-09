@@ -27,8 +27,8 @@ const handleLoginDoctorBtn = async (req, res) => {
                     );
                     res.cookie(`Token_${doctor._id}`, token, {
                         httpOnly: true,
-                        secure: false,
-                        sameSite: "lax"
+                        secure: true,
+                        sameSite: "none"
                     });
                     res.status(200).json({ doctor, token })
                 }
