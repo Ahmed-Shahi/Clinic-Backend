@@ -26,7 +26,24 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(helmet());
-Connect(process.env.MONGODB_URL).then(() => console.log("Database Connected Successfull!!")).catch((err) => console.log(err))
+
+// Connect(process.env.MONGODB_URL).then(() => console.log("Database Connected Successfull!!")).catch((err) => console.log(err))
+let isDBConnected = false;
+async function connectToDB() {
+    try {
+        await Connect(process.env.MONGODB_URL);
+        isDBConnected = true;
+        console.log("Database Connected Successfull!!");
+    } catch (error) {
+        console.log(error);
+    }
+}
+app.use((req, res, next) => {
+    if (!isDBConnected) {
+        connectToDB();
+    }
+    next();
+}); 
 
 app.use('/api', authRouter)
 app.use('/api', profileRouter)
@@ -38,6 +55,8 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: 'Internal Server Error' });
 });
-app.listen(PORT, () => {
-  console.log("Server is Successfully Running!!");
-})
+// app.listen(PORT, () => {
+//   console.log("Server is Successfully Running!!");
+// })
+
+module.exports = app
