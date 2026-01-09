@@ -6,7 +6,7 @@ const handleGetData = async (req, res) => {
         const query = await SignUp.find({})
         return res.json(query)
     } catch (error) {
-        res.send(error.Message)
+        res.send(error.message)
     }
 }
 

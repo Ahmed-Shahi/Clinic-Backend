@@ -27,7 +27,6 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(helmet());
 
-// Connect(process.env.MONGODB_URL).then(() => console.log("Database Connected Successfull!!")).catch((err) => console.log(err))
 let isDBConnected = false;
 async function connectToDB() {
     try {
@@ -38,9 +37,9 @@ async function connectToDB() {
         console.log(error);
     }
 }
-app.use((req, res, next) => {
+app.use(async(req, res, next) => {
     if (!isDBConnected) {
-        connectToDB();
+      await connectToDB();
     }
     next();
 }); 
@@ -55,8 +54,5 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: 'Internal Server Error' });
 });
-// app.listen(PORT, () => {
-//   console.log("Server is Successfully Running!!");
-// })
 
 module.exports = app
