@@ -18,7 +18,7 @@ const handleLoginBtn = async (req, res) => {
             bcrypt.compare(userPassword, user.password, async function (err, result) {
                 if (!result) {
                     // console.log(result);
-                    return res.status(200).json({ Message: "Password Incorrect!!" });  
+                    return res.status(200).json({ Message: "Password Incorrect!!" });
                 }
                 else {
                     const token = jwt.sign(
@@ -33,11 +33,11 @@ const handleLoginBtn = async (req, res) => {
                     res.cookie(`Token_${user._id}`, token, {
                         httpOnly: true,
                         secure: true,
-                        sameSite: "none"
+                        sameSite: "lax"
                     });
                     res.status(200).json({ user, token })
                 }
-                
+
             });
         }
     } catch (error) {

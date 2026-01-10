@@ -18,7 +18,7 @@ const handleLoginDoctorBtn = async (req, res) => {
                 }
                 else {
                     const token = jwt.sign(
-                        {  
+                        {
                             name: doctorName,
                             password: doctor.password
                         },
@@ -28,7 +28,7 @@ const handleLoginDoctorBtn = async (req, res) => {
                     res.cookie(`Token_${doctor._id}`, token, {
                         httpOnly: true,
                         secure: true,
-                        sameSite: "none"
+                        sameSite: "lax"
                     });
                     res.status(200).json({ doctor, token })
                 }
@@ -45,7 +45,7 @@ const handleGetDoctorData = async (req, res) => {
         const allDoctors = await Doctor.find({})
         const onlyLogin = await Doctor.findById(id)
         console.log(onlyLogin, allDoctors);
-        return res.json( {onlyLogin,allDoctors} )
+        return res.json({ onlyLogin, allDoctors })
     } catch (error) {
         res.send(error.Message)
     }
@@ -54,7 +54,7 @@ const handleGetDoctorData = async (req, res) => {
 const handleGetAllPatients = async (req, res) => {
     try {
         const { id } = req.params;
-        const allPatients = await Appointment.find({ doctorId: id })  
+        const allPatients = await Appointment.find({ doctorId: id })
         console.log('All Patients:', allPatients);
         return res.json(allPatients)
     } catch (error) {
@@ -78,4 +78,4 @@ const handleLogoutBtn = async (req, res) => {
     });
     res.json({ message: "Logged out successfully" });
 }
-module.exports = {handleLoginDoctorBtn,handleGetDoctorData,handleGetAllPatients,handleLogoutBtn};
+module.exports = { handleLoginDoctorBtn, handleGetDoctorData, handleGetAllPatients, handleLogoutBtn };
